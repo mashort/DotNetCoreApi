@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace CoreCodeCamp.Data
 {
-  public class CampContextFactory : IDesignTimeDbContextFactory<CampContext>
+    public class CampContextFactory : IDesignTimeDbContextFactory<CampContext>
   {
     public CampContext CreateDbContext(string[] args)
     {
