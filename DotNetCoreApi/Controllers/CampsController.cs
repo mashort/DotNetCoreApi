@@ -36,7 +36,6 @@ namespace CoreCodeCamp.Controllers
             }
             catch (Exception)
             {
-
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
             }
         }
@@ -71,7 +70,6 @@ namespace CoreCodeCamp.Controllers
             }
             catch (Exception)
             {
-
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
             }
         }
@@ -81,6 +79,7 @@ namespace CoreCodeCamp.Controllers
             try
             {
                 var existing = await _repository.GetCampAsync(model.Moniker);
+
                 if (existing != null)
                 {
                     return BadRequest("Moniker in use");
@@ -97,7 +96,8 @@ namespace CoreCodeCamp.Controllers
                     return BadRequest("Could not use current moniker");
                 }
                 
-                // Take the CampModel and use AutoMapper to map it back to a Camp entity before adding it to the data store
+                // Take the CampModel and use AutoMapper to map it back to a Camp entity before adding it to the data store.
+                // Added .ReverseMap() to CampProfile.cs to support this
                 var camp = _mapper.Map<Camp>(model);
                 _repository.Add(camp);
 
@@ -111,11 +111,38 @@ namespace CoreCodeCamp.Controllers
             }
             catch (Exception)
             {
-
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
             }
 
             // If something bad happens that doesn't cause an exception
+            return BadRequest();
+        }
+
+        [HttpPut("{moniker}")]
+        public async Task<ActionResult<CampModel>> Put(string moniker, CampModel model)
+        {
+            try
+            {
+                var oldCamp = await _repository.GetCampAsync(moniker);
+
+                if (oldCamp == null) return NotFound($"Could not find camp with moniker of {moniker}");
+
+                // Can use AutoMapper in a different way, this time to update the existing model object
+                // with the changes being sent into this action
+                _mapper.Map(model, oldCamp);
+
+                if (await _repository.SaveChangesAsync())
+                {
+                    // Don't need to return Ok here, because a PUT action that returns an ActionResut
+                    // returns Ok / 200 automatically
+                    return _mapper.Map<CampModel>(oldCamp);
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
+
             return BadRequest();
         }
     }
