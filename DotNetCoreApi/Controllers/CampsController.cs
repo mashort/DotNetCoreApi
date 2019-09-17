@@ -80,6 +80,12 @@ namespace CoreCodeCamp.Controllers
         {
             try
             {
+                var existing = await _repository.GetCampAsync(model.Moniker);
+                if (existing != null)
+                {
+                    return BadRequest("Moniker in use");
+                }
+                
                 // LinkGenerator is available in ASP.NET Core 2.2+
                 // and can be used to dynamically get the Uri of the newly created resource
                 var location = _linkGenerator.GetPathByAction("Get",
