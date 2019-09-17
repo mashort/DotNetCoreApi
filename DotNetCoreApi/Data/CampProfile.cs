@@ -15,7 +15,11 @@ namespace CoreCodeCamp.Data
                 .ReverseMap();
 
             CreateMap<Talk, TalkModel>()
-                .ReverseMap();
+                .ReverseMap()
+                // These 2 Ignores are to ensure that the Camp & Speaker are not sheared off
+                // if they have not been provided in the TalkModel when doing a PUT
+                .ForMember(t => t.Camp, opt => opt.Ignore())
+                .ForMember(t => t.Speaker, opt => opt.Ignore());
 
             CreateMap<Speaker, SpeakerModel>()
                 .ReverseMap();
