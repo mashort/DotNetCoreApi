@@ -46,6 +46,8 @@ namespace CoreCodeCamp.Controllers
             {
                 var talk = await _repository.GetTalkByMonikerAsync(moniker, id, true);
 
+                if (talk == null) return NotFound($"Failed to find the talk with the id of {id}");
+
                 return _mapper.Map<TalkModel>(talk);
             }
             catch (Exception)
@@ -102,7 +104,7 @@ namespace CoreCodeCamp.Controllers
         {
             try
             {
-                var talk = await _repository.GetTalkByMonikerAsync(moniker, id, true);
+                var talk = await _repository.GetTalkByMonikerAsync(moniker, id);
 
                 if (talk == null) return NotFound($"Couldn't find the talk with the id of {id}");
 
@@ -132,6 +134,32 @@ namespace CoreCodeCamp.Controllers
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to update Talk");
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(string moniker, int id)
+        {
+            try
+            {
+                var talk = await _repository.GetTalkByMonikerAsync(moniker, id);
+
+                if (talk == null) return NotFound("Failed to find the talk to delete");
+
+                _repository.Delete(talk);
+
+                if (await _repository.SaveChangesAsync())
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Failed to delete talk");
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to delete Talk");
             }
         }
     }
