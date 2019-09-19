@@ -16,6 +16,12 @@ namespace CoreCodeCamp
 
       services.AddAutoMapper(typeof(Startup));
 
+        services.AddApiVersioning(opt => 
+        {
+            opt.DefaultApiVersion = new ApiVersion(1, 1);
+            opt.ReportApiVersions = true;
+        });
+
       services.AddMvc()
         .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
     }
