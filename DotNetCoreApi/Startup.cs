@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using CoreCodeCamp.Controllers;
 using CoreCodeCamp.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.Mvc.Versioning.Conventions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CoreCodeCamp
@@ -32,6 +34,13 @@ namespace CoreCodeCamp
                 //    new QueryStringApiVersionReader("ver", "version"));
 
                 //opt.ApiVersionReader = new UrlSegmentApiVersionReader();
+
+                // Centralised versioning (rather than on Controllers & Actions)
+                //opt.Conventions.Controller<TalksController>()
+                //    .HasApiVersion(new ApiVersion(1, 0))
+                //    .HasApiVersion(new ApiVersion(1, 1))
+                //    .Action(c => c.Delete(default(string), default(int)))
+                //        .MapToApiVersion(1, 1);
             });
 
             services.AddMvc()
