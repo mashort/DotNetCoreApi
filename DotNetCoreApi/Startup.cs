@@ -8,33 +8,33 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CoreCodeCamp
 {
     public class Startup
-  {
-    public void ConfigureServices(IServiceCollection services)
     {
-      services.AddDbContext<CampContext>();
-      services.AddScoped<ICampRepository, CampRepository>();
-
-      services.AddAutoMapper(typeof(Startup));
-
-        services.AddApiVersioning(opt => 
+        public void ConfigureServices(IServiceCollection services)
         {
-            opt.AssumeDefaultVersionWhenUnspecified = true;
-            opt.DefaultApiVersion = new ApiVersion(1, 1);
-            opt.ReportApiVersions = true;
-        });
+            services.AddDbContext<CampContext>();
+            services.AddScoped<ICampRepository, CampRepository>();
 
-      services.AddMvc()
-        .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-    }
+            services.AddAutoMapper(typeof(Startup));
 
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-    {
-      if (env.IsDevelopment())
-      {
-        app.UseDeveloperExceptionPage();
-      }
+            services.AddApiVersioning(opt => 
+            {
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 1);
+                opt.ReportApiVersions = true;
+            });
+
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+        }
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
       
-      app.UseMvc();
+            app.UseMvc();
+        }
     }
-  }
 }
